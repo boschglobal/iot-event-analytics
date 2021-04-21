@@ -18,7 +18,7 @@
 using json = nlohmann::json;
 using namespace iotea::core;
 
-static const char SERVER_ADDRESS[] = "tcp://localhost:1883";
+static const char SERVER_ADDRESS[] = "tcp://mosquitto:1883";
 static const char TALENT_ID[] = "functionProvider-cpp";
 static const char FUNC_ECHO[] = "echo";
 

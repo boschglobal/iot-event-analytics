@@ -19,29 +19,14 @@ jobs:
       # Build & run platform.
       # It's run daemonized (docker-compose -d) since a running platform
       # is needed later in the "Run integration tests" step
-      run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml --env-file .env up --build -d
+      run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml --env-file .env up --build -d --remove-orphans
 
-    - name: Setup test dependencies
-      working-directory: ${{github.workspace}}/test/integration-tests
+    - name: Run all SDK's integration tests
+      working-directory: ${{github.workspace}}/docker-compose
       shell: bash
-      run: |
-        yarn --frozen-lockfile
-        python3 -m venv .venv
-        source .venv/bin/activate
-        pip install wheel
-        pip install ${{github.workspace}}/src/sdk/python/lib/boschio_iotea-0.4.0-py3-none-any.whl
-
-    - name: Run integration tests
-      working-directory: ${{github.workspace}}/test/integration-tests
-      shell: bash
-      # The required "test talents" are started manually as background
-      # jobs before finally invoking the test runner.
-      run: |
-        source .venv/bin/activate
-        python ./testset_sdk/python/test_set_sdk.py 2>&1 >/dev/null &
-        python ./testset_sdk/python/function_provider.py 2>&1 >/dev/null &
-        node ./testset_sdk/javascript/functionProvider.js 2>&1 >/dev/null &
-        node ./testset_sdk/javascript/testSetSDK.js 2>&1 >/dev/null &
-        node ./runner/javascript/test_runner.js
+      # All the SDK's integration tests are dockerized and build the
+      # latest version of the platform each time. The test runner 
+      # container will exit with a basic 0:pass/1:fail code currently
+      run: docker-compose -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_runner.yml up --build --remove-orphans
       timeout-minutes: 1
 

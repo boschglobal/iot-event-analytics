@@ -5,5 +5,7 @@
     "search.exclude": {
         "src/sdk/vscode/out": true
     },
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "cmake.configureOnOpen": false,
+    "python.pythonPath": "C:\\Python39\\python.exe"
 }

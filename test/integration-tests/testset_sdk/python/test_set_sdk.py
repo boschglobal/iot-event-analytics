@@ -116,7 +116,7 @@ class TestSetSDK(TestSetTalent):
 
 
 async def main():
-    talent = TestSetSDK('mqtt://localhost:1883')
+    talent = TestSetSDK('mqtt://mosquitto:1883')
     await talent.start()
 
 
