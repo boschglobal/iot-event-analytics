@@ -22,7 +22,7 @@ using namespace iotea::core;
 using namespace iotea::test;
 
 
-static const char SERVER_ADDRESS[] = "tcp://localhost:1883";
+static const char SERVER_ADDRESS[] = "tcp://mosquitto:1883";
 static const char TALENT_NAME[] = "testSet-sdk-cpp";
 static const char FEATURE_TESTABLE_TALENT[] = "functionProvider-cpp";
 static const char FUNC_TESTABLE_TALENT_ECHO[] = "echo";

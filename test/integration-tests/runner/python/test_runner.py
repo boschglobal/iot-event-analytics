@@ -22,11 +22,11 @@ os.environ['MQTT_TOPIC_NS'] = 'iotea/'
 
 class TestRunner(TestRunnerTalent):
     def __init__(self, connection_string):
-        super(TestRunner, self).__init__('testRunner-py', ['testSet-sdk-py', 'testSet-sdk-js'], connection_string)
-
+        super(TestRunner, self).__init__('testRunner-py', ['testSet-sdk-py'], connection_string)
+        
 async def main():
-    test_runner = TestRunner('mqtt://localhost:1883')
-    await test_runner.start()
+    testrunner = TestRunner('mqtt://mosquitto-local:1883') #TODO This is a workaround as not using a config.json or new Protocol-adapter
+    await testrunner.start()
 
 if __name__ == '__main__':
     LOOP = asyncio.get_event_loop()

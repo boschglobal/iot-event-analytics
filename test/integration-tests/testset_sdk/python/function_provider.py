@@ -33,7 +33,7 @@ class FunctionProvider(FunctionTalent):
 
 
 async def main():
-    function_provider = FunctionProvider('mqtt://localhost:1883')
+    function_provider = FunctionProvider('mqtt://mosquitto:1883')
     await function_provider.start()
 
 if __name__ == '__main__':
