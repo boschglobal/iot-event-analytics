@@ -19,10 +19,10 @@ RUN mkdir -p /app
 WORKDIR /app
 
 # Copy C++ SDK sources
-COPY ../src/sdk/cpp ./src/sdk/cpp
+COPY /src/sdk/cpp ./src/sdk/cpp
 
 # Copy C++ integration-Test sources
-COPY ../${INTEGRATION_TEST_PATH} ./${INTEGRATION_TEST_PATH}
+COPY ${INTEGRATION_TEST_PATH} .${INTEGRATION_TEST_PATH}
 
 # set the directory for building the cpp app's
 WORKDIR /app/${INTEGRATION_TEST_PATH}
