@@ -19,7 +19,7 @@ jobs:
       # Build & run platform.
       # It's run daemonized (docker-compose -d) since a running platform
       # is needed later in the "Run integration tests" step
-      run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml --env-file .env up --build -d --remove-orphans
+      run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml --env-file .env up --build -d
 
     - name: Run all SDK's integration tests
       working-directory: ${{github.workspace}}/docker-compose
@@ -27,6 +27,6 @@ jobs:
       # All the SDK's integration tests are dockerized and build the
       # latest version of the platform each time. The test runner 
       # container will exit with a basic 0:pass/1:fail code currently
-      run: docker-compose -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_runner.yml up --build --remove-orphans
+      run: docker-compose -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_runner.yml up --build -d
       timeout-minutes: 1
 
