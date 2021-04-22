@@ -17,7 +17,7 @@ WORKDIR /build
 COPY package.json yarn.lock .npmignore ./
 
 # need to copy the whole src directory
-COPY ../src ./src
+COPY /src ./src
 
 RUN npm config set strict-ssl false -g
 RUN npm config set maxsockets 5 -g

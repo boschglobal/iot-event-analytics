@@ -1,5 +1,5 @@
 # STAGE 1: include & install all Build dependencies + OS (TODO local for now) 
-FROM python:3.8-slim-buster as base_stage  
+FROM python:3.8 as base_stage  
 
 ARG HTTP_PROXY
 ARG HTTPS_PROXY
@@ -25,7 +25,7 @@ RUN python -m pip install -r requirements.txt --user
 FROM pre-build_stage as build_stage
 
 # need to copy the whole src directory
-COPY ../src ./src
+COPY /src ./src
 
 # Create lib directory for building from scratch 
 RUN mkdir -p /build/src/sdk/python/lib
@@ -47,5 +47,5 @@ ARG INTEGRATION_TEST_PATH
 WORKDIR /build/app
 
 COPY ${INTEGRATION_TEST_PATH}/test_set_sdk.py .
-ENTRYPOINT ["python3", "./test_set_sdk.py"]
+ENTRYPOINT ["python", "./test_set_sdk.py"]
 

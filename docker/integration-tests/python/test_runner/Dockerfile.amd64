@@ -25,7 +25,7 @@ RUN python -m pip install -r requirements.txt --user
 FROM pre-build_stage as build_stage
 
 # need to copy the whole src directory
-COPY ../src ./src
+COPY /src ./src
 
 # Create lib directory for building from scratch 
 RUN mkdir -p /build/src/sdk/python/lib
