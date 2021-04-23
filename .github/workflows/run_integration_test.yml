@@ -10,29 +10,29 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Setup & Build platform
+    - name: Build platform
       working-directory: ${{github.workspace}}/docker-compose
       shell: bash
       # Build & run platform.
       # It's run daemonized (docker-compose -d) since a running platform
       # is needed later in the "Run integration tests" step
-      run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml --env-file .env build --parallel
+      run: COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml --env-file .env build --parallel
       #run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml --env-file .env up --build -d
 
-    - name: Setup & Build integration-tests suite's for all SDK's 
+    - name: Build integration-tests suite's for all SDK's 
       working-directory: ${{github.workspace}}/docker-compose
       shell: bash
       # All the SDK's integration tests are dockerized and build the
       # latest version of the platform each time. 
-      run: docker-compose -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml -f docker-compose.integration_tests_cpp.yml --env-file .env build --parallel
+      run: COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml -f docker-compose.integration_tests_cpp.yml --env-file .env build --parallel
       #run: docker-compose -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml --env-file .env up --build -d
 
-    - name: Setup & Build integration-tests runner 
+    - name: Build integration-tests runner 
       working-directory: ${{github.workspace}}/docker-compose
       shell: bash
       # All the SDK's integration tests are dockerized and build the
       # latest version of the platform each time. 
-      run: docker-compose -f docker-compose.integration_tests_runner.yml --env-file .env build --parallel
+      run: COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.integration_tests_runner.yml --env-file .env build --parallel
 
     - name: Start platform & ALL SDK test-suite's
       working-directory: ${{github.workspace}}/docker-compose
