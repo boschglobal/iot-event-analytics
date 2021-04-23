@@ -16,20 +16,20 @@ jobs:
       # Build & run platform.
       # It's run daemonized (docker-compose -d) since a running platform
       # is needed later in the "Run integration tests" step
-      run: COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml --env-file .env up --build -d
+      run: COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml --env-file .env up --build --parallel -d
 
     - name: Setup & Start integration tests suite's for all SDK's 
       working-directory: ${{github.workspace}}/docker-compose
       shell: bash
       # All the SDK's integration tests are dockerized and build the
       # latest version of the platform each time. 
-      run: COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml up --build -d
+      run: COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml up --build --parallel -d
 
     - name: Start test runner
       working-directory: ${{github.workspace}}/docker-compose
       shell: bash
       # This is a test as this container must exit once all tests are completed! The test runner 
       # container will exit with a basic 0:pass/1:fail code currently
-      run: COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.integration_tests_runner.yml up --build
-      timeout-minutes: 1
+      run: COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.integration_tests_runner.yml up --build
+      timeout-minutes: 2
 
