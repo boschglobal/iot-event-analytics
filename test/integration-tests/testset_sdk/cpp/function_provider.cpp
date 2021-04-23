@@ -13,13 +13,15 @@
 
 #include "nlohmann/json.hpp"
 #include "iotea.hpp"
+#include "logging.hpp"
+#include "mqtt_client.hpp"
 
 using json = nlohmann::json;
 using namespace iotea::core;
 
-static const char SERVER_ADDRESS[] = "tcp://mosquitto:1883";
-static const char TALENT_ID[] = "functionProvider-cpp";
-static const char FUNC_ECHO[] = "echo";
+static constexpr char SERVER_ADDRESS[] = "tcp://mosquitto:1883";
+static constexpr char TALENT_ID[] = "functionProvider-cpp";
+static constexpr char FUNC_ECHO[] = "echo";
 
 class FunctionProvider : public FunctionTalent {
    public:
