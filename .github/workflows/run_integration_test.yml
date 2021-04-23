@@ -10,26 +10,35 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Setup & start platform
+    - name: Setup & Build platform
       working-directory: ${{github.workspace}}/docker-compose
       shell: bash
       # Build & run platform.
       # It's run daemonized (docker-compose -d) since a running platform
       # is needed later in the "Run integration tests" step
-      run: COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml --env-file .env up --build --parallel -d
+      run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml --env-file .env build --parallel --remove-orphans
+      #run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml --env-file .env up --build -d
 
-    - name: Setup & Start integration tests suite's for all SDK's 
+    - name: Setup & Build integration-tests suite's for all SDK's 
       working-directory: ${{github.workspace}}/docker-compose
       shell: bash
       # All the SDK's integration tests are dockerized and build the
       # latest version of the platform each time. 
-      run: COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml up --build --parallel -d
+      run: docker-compose -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml -f docker-compose.integration_tests_cpp.yml --env-file .env up  build --parallel --remove-orphans
+      #run: docker-compose -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml --env-file .env up --build -d
 
-    - name: Start test runner
+    - name: Setup & Build integration-tests runner 
+      working-directory: ${{github.workspace}}/docker-compose
+      shell: bash
+      # All the SDK's integration tests are dockerized and build the
+      # latest version of the platform each time. 
+      run: docker-compose -f docker-compose.integration_tests_runner.yml --env-file .env build --parallel --remove-orphans
+
+    - name: Start tests
       working-directory: ${{github.workspace}}/docker-compose
       shell: bash
       # This is a test as this container must exit once all tests are completed! The test runner 
       # container will exit with a basic 0:pass/1:fail code currently
-      run: COMPOSE_DOCKER_CLI_BUILD=0 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.integration_tests_runner.yml up --build
+      run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_runner.yml up
       timeout-minutes: 5
 
