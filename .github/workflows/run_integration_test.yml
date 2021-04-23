@@ -10,10 +10,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Build platform
+    - name: Build EVERYTHING together!
       working-directory: ${{github.workspace}}/docker-compose
       shell: bash
-      run: COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml --env-file .env build --parallel
+      run: COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml -f docker-compose.integration_tests_runner.yml --env-file .env build --parallel
     
     - name: Start platform & ALL SDK test-suite's
       working-directory: ${{github.workspace}}/docker-compose
