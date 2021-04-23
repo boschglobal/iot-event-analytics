@@ -1,4 +1,4 @@
-name: Integration test
+name: Integration test optimized
 
 on: [push, pull_request]
 
@@ -9,38 +9,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    
-    # Pull the latest image to build, and avoid caching pull-only images.
-    # (docker pull is faster than caching in most cases.)
-    - run: docker-compose pull
 
-    # In this step, this action saves a list of existing images,
-    # the cache is created without them in the post run.
-    # It also restores the cache if it exists.
+    # Testing docker-layer-caching - TODO needs a re-write of docker-compose to have a single .yml file (could use [profiles] for seperation)
+    - run: docker-compose pull
     - uses: satackey/action-docker-layer-caching@v0.0.11
-      # Ignore the failure of a step and avoid terminating the job.
       continue-on-error: true
 
-    - name: Setup & start platform
+    - name: Testing a single compose approach (platform + test_suites)
       working-directory: ${{github.workspace}}/docker-compose
       shell: bash
       # Build & run platform.
-      # It's run daemonized (docker-compose -d) since a running platform
-      # is needed later in the "Run integration tests" step
-      run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml --env-file .env up --build -d
-
-    - name: Setup & Start integration tests suite's for all SDK's 
-      working-directory: ${{github.workspace}}/docker-compose
-      shell: bash
-      # All the SDK's integration tests are dockerized and build the
-      # latest version of the platform each time. 
-      run: docker-compose -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml up --build -d
+      # All the SDK's integration tests are dockerized and build the latest version of the platform each time. 
+      run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml --env-file .env up --build -d
 
     - name: Start test runner
       working-directory: ${{github.workspace}}/docker-compose
       shell: bash
-      # This is a test as this container must exit once all tests are completed! The test runner 
-      # container will exit with a basic 0:pass/1:fail code currently
+      # This is a test as this container must exit once all tests are completed! The test runner will exit with a 0:pass/1:fail
       run: docker-compose -f docker-compose.integration_tests_runner.yml up --build
       timeout-minutes: 1
 

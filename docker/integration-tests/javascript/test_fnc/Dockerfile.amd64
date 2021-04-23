@@ -1,4 +1,4 @@
-FROM node:15.13.0 as base_stage
+FROM node:12.22 as base_stage
 
 ARG HTTP_PROXY
 ARG HTTPS_PROXY
@@ -45,7 +45,7 @@ RUN node-prune
 
 
 
-FROM node:15.13.0-slim as runtime_stage
+FROM mhart/alpine-node:slim-12.22 as runtime_stage
 # TODO can add in non-root setup here when needed 
 
 ARG INTEGRATION_TEST_PATH
