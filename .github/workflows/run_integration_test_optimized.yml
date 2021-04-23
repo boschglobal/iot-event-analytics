@@ -10,11 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    # Testing docker-layer-caching - TODO needs a re-write of docker-compose to have a single .yml file (could use [profiles] for seperation)
-    - run: docker-compose pull
-    - uses: satackey/action-docker-layer-caching@v0.0.11
-      continue-on-error: true
-
     - name: Testing a single compose approach (platform + test_suites)
       working-directory: ${{github.workspace}}/docker-compose
       shell: bash
