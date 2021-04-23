@@ -10,17 +10,22 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Testing a single compose approach (platform + test_suites)
+    - name: Testing a single compose approach (MQTT + platform + test-suites + test-runner)
       working-directory: ${{github.workspace}}/docker-compose
       shell: bash
       # Build & run platform.
       # All the SDK's integration tests are dockerized and build the latest version of the platform each time. 
-      run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml --env-file .env up --build -d
+      run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml -f docker-compose.integration_tests_runner.yml --env-file .env build --parallel  
+      
+    - name: Start MQTT + Platform + test-suites
+      working-directory: ${{github.workspace}}/docker-compose
+      shell: bash
+      run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml -f docker-compose.integration_tests_runner.yml up -d
 
-    - name: Start test runner
+    - name: Start test-runner
       working-directory: ${{github.workspace}}/docker-compose
       shell: bash
       # This is a test as this container must exit once all tests are completed! The test runner will exit with a 0:pass/1:fail
-      run: docker-compose -f docker-compose.integration_tests_runner.yml up --build
+      run: docker-compose -f docker-compose.integration_tests_runner.yml up
       timeout-minutes: 1
 
