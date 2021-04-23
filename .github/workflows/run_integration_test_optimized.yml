@@ -15,7 +15,7 @@ jobs:
       shell: bash
       # Build & run platform.
       # All the SDK's integration tests are dockerized and build the latest version of the platform each time. 
-      run: docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml -f docker-compose.integration_tests_runner.yml --env-file .env build --parallel  
+      run: COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose build docker-compose -f docker-compose.mosquitto.yml -f docker-compose.platform.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_cpp.yml -f docker-compose.integration_tests_js.yml -f docker-compose.integration_tests_py.yml -f docker-compose.integration_tests_runner.yml --env-file .env build --parallel  
       
     - name: Start MQTT + Platform + test-suites
       working-directory: ${{github.workspace}}/docker-compose
