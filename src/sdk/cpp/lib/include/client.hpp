@@ -176,6 +176,8 @@ class Client : public Receiver {
      std::function<void(const ErrorMessage& msg)> OnError;
      std::function<void(const PlatformEvent& event)> OnPlatformEvent;
 
+     void Publish(const std::string& topic, const std::string& data);
+
     protected:
         Client(std::shared_ptr<MqttClient> mqtt_client, std::shared_ptr<CalleeTalent> callee_talent, reply_handler_ptr reply_handler, const std::string& mqtt_topic_ns);
 

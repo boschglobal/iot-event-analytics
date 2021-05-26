@@ -112,6 +112,10 @@ void Client::Start() {
     mqtt_client_->Run();
 }
 
+void Client::Publish(const std::string& topic, const std::string& data) {
+    mqtt_client_->Publish(topic, data);
+}
+
 void Client::Stop() {
     mqtt_client_->Stop();
 }
