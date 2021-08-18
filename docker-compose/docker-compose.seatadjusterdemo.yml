@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  iotea:
+    platform: linux/arm64
+    build:
+      context: ../
+      labels:
+        arch: arm64
+      dockerfile: docker/platform/Dockerfile.slim.arm64
+      #dockerfile: docker/platform/Dockerfile.arm64
+      args:
+        - HTTP_PROXY=${DOCKER_HTTP_PROXY}
+        - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
+    networks:
+      - iotea-platform-network
+    extra_hosts:
+      - "edgehost:172.17.0.1"
+    volumes:
+      - type: bind
+        source: "../seatadjuster-config/config"
+        target: "/app/docker/platform/config"
+networks:
+  iotea-platform-network:
+    name: iotea-platform-network
+    driver: bridge
