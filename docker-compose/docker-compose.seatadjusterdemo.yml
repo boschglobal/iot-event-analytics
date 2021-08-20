@@ -17,7 +17,7 @@ services:
       - "edgehost:172.17.0.1"
     volumes:
       - type: bind
-        source: "../seatadjuster-config/config"
+        source: "./seatadjuster-config"
         target: "/app/docker/platform/config"
 networks:
   iotea-platform-network:
