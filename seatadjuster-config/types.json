@@ -1,0 +1,20 @@
+{
+    "100000": {
+        "features": {},
+        "types": {
+            "Vehicle": {
+                "features": {
+                    "CockpitButton": {
+                        "description": "SeatPosition Adjuster button",
+                        "idx": 0,
+                        "history": 20,
+                        "encoding": {
+                            "type": "string",
+                            "encoder": null
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

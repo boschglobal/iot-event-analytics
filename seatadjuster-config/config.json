@@ -1,0 +1,20 @@
+{
+    "loglevel": "VERBOSE",
+    "platformId": "123456",
+    "talentDiscoveryIntervalMs": 30000,
+    "protocolGateway": {
+        "adapters": [
+            {
+                "platform": true,
+                "module": {
+                    "name": "./util/mqttClient",
+                    "class": "MqttProtocolAdapter"
+                },
+                "config": {
+                    "topicNamespace": "iotea/",
+                    "brokerUrl": "mqtt://edgehost:1883"
+                }
+            }
+        ]
+    }
+}
